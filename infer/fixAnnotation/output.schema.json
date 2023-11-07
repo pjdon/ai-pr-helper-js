@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "properties": {
+    "changeText": {
+      "type": "string",
+      "description": "The new text of the part of fileContent that was changed in response to the annotation"
+    },
+    "start_line": {
+      "type": "integer",
+      "description": "The line number where the change starts."
+    },
+    "end_line": {
+      "type": "integer",
+      "description": "The line number where the change ends."
+    }
+  },
+  "required": ["changeText", "start_line", "end_line"]
+}

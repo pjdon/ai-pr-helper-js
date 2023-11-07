@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "properties": {
+    "fileContent": {
+      "type": "string",
+      "description": "The content of the file to be analyzed."
+    },
+    "annotation": {
+      "type": "object",
+      "properties": {
+        "start_line": {
+          "type": "integer",
+          "description": "The line number where the annotation starts."
+        },
+        "end_line": {
+          "type": "integer",
+          "description": "The line number where the annotation ends."
+        },
+        "message": {
+          "type": "string",
+          "description": "The message associated with the annotation."
+        }
+      },
+      "required": [
+        "start_line",
+        "end_line",
+        "start_column",
+        "end_column",
+        "message"
+      ],
+      "description": "An object containing the annotation location and message."
+    }
+  },
+  "required": ["fileContent", "annotation"],
+  "description": "A JSON schema for the input data required by the AI PR helper."
+}

@@ -1,6 +1,8 @@
 // Checks API example
 // See: https://developer.github.com/v3/checks/ to learn more
 
+const { fixAnnotation } = require("./infer");
+
 /**
  * This is the main entrypoint to your Probot app
  * @param {import('probot').Probot} app
@@ -19,11 +21,16 @@ module.exports = (app) => {
       { ...repoDetails, checkRunId }
     );
 
-    makeHelpPrComments(context.octokit, {
-      ...repoDetails,
-      pullNumber,
-      annotationSet,
-    });
+    const fileContent = annotationSet[0].content;
+    const annotation = annotationSet[0].annotations[0];
+
+    const res = await fixAnnotation({ fileContent, annotation });
+
+    // makeHelpPrComments(context.octokit, {
+    //   ...repoDetails,
+    //   pullNumber,
+    //   annotationSet,
+    // });
   });
 };
 
@@ -119,11 +126,8 @@ async function getCheckRunFileAnnotationsByBlob(
     const blobHref = ant.blob_href;
     const data = {
       start_line: ant.start_line,
-      start_column: ant.start_column,
       end_line: ant.end_line,
-      end_column: ant.end_column,
       message: ant.message,
-      row_details: ant.row_details,
     };
 
     if (blobMap.has(blobHref)) {
