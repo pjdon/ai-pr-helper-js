@@ -12,13 +12,53 @@ module.exports = (app) => {
     const checkRunId = context.payload.check_run.id;
     const repoFullName = context.payload.repository.full_name;
     const repoDetails = getRepoDetails(repoFullName);
+    const pullNumber = context.payload.check_run.pull_requests[0].number;
 
-    const annotations = await getCheckRunFileAnnotationsByBlob(
+    const annotationSet = await getCheckRunFileAnnotationsByBlob(
       context.octokit,
       { ...repoDetails, checkRunId }
     );
+
+    makeHelpPrComments(context.octokit, {
+      ...repoDetails,
+      pullNumber,
+      annotationSet,
+    });
   });
 };
+
+const comment = `\
+\`\`\`suggestion
+import { html, LitElement } from "lit";
+\`\`\`\
+`;
+
+async function makeHelpPrComments(
+  octokit,
+  { owner, repo, pullNumber, annotationSet }
+) {
+  for (const { path, commit, content, annotations } of annotationSet) {
+    for (const ant of annotations) {
+      try {
+        const res = await octokit.rest.pulls.createReviewComment({
+          owner,
+          repo,
+          pull_number: pullNumber,
+          commit_id: commit,
+          path,
+          body: comment,
+          side: "RIGHT",
+          line: ant.end_line,
+          ...(ant.start_line < ant.end_line
+            ? { start_line: ant.start_line }
+            : {}),
+        });
+      } catch (error) {
+        console.error("Failed to create review comment", { error });
+      }
+    }
+  }
+}
 
 const repoFullNamePattern = /(?<owner>[\w\-]+)\/(?<repo>[\w\-]+)/gim;
 
@@ -111,6 +151,7 @@ async function getCheckRunFileAnnotationsByBlob(
 
             return resolve({
               path: blobDetails.path,
+              commit: blobDetails.ref,
               content,
               annotations,
             });
