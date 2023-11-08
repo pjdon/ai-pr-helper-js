@@ -9,7 +9,7 @@
           "request": "launch",
           "name": "Launch Probot",
           "program": "${workspaceFolder}/node_modules/probot/bin/probot.js",
-          "args": ["run", "./src/index.js"],      
+          "args": ["run", "./src/handler.js"],      
           "cwd": "${workspaceRoot}/"
         }
     ]
