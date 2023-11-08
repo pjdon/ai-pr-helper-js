@@ -17,8 +17,8 @@ Call the function 'publish_change' where
 `;
 
 module.exports = (openai) => {
-  async function inferFixAnnotation(input) {
-    const inputString = JSON.stringify(input);
+  async function inferFixAnnotation({ fileContent, annotation }) {
+    const inputString = JSON.stringify({ fileContent, annotation });
 
     const pkg = {
       model: "gpt-4-1106-preview",

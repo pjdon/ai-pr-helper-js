@@ -9,5 +9,5 @@ if (!apiKey) {
 const openai = new OpenAI({ apiKey });
 
 module.exports = {
-    fixAnnotation: fixAnnotation(openai)
+  inferAnnotationFix: fixAnnotation(openai)
 };
