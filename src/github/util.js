@@ -1,4 +1,4 @@
-const repoFullNamePattern = /(?<owner>[\w\-]+)\/(?<repo>[\w\-]+)/gim;
+const repoFullNamePattern = /(?<owner>[\w\-]+)\/(?<repo>[\w\-]+)/im;
 
 function extractRepoInfo(repoFullName) {
   const match = repoFullNamePattern.exec(repoFullName);
@@ -25,7 +25,7 @@ function extractRepoInfo(repoFullName) {
 }
 
 const githubBlobPattern =
-  /https:\/\/github\.com\/(?<owner>[\w\-]+)\/(?<repo>[\w\-]+)\/blob\/(?<ref>\w+)\/(?<path>.+)/gim;
+  /https:\/\/github\.com\/(?<owner>[\w\-]+)\/(?<repo>[\w\-]+)\/blob\/(?<ref>\w+)\/(?<path>.+)/im;
 
 function extractBlobHrefInfo(blobHref) {
   const match = githubBlobPattern.exec(blobHref);
